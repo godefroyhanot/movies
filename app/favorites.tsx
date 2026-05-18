@@ -4,21 +4,23 @@ import { router } from 'expo-router';
 import { movies } from './src/data/movies';
 import { MovieCard, EmptyState } from '../components/movies';
 import { useFavorites } from './src/context/FavoritesContext';
+import { useTheme } from './src/context/ThemeContext';
 
 export default function Favorites() {
-  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const { favorites, toggleFavorite } = useFavorites();
+  const { colors } = useTheme();
 
   const favoriteMovies = useMemo(() => {
     return movies.filter(movie => favorites.includes(movie.id));
   }, [favorites]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: colors.backgroundSecondary }]}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <Pressable onPress={() => router.back()}>
-           <Text style={styles.backLink}>← Retour</Text>
+           <Text style={[styles.backLink, { color: colors.tint }]}>← Retour</Text>
         </Pressable>
-        <Text style={styles.title}>Mes Favoris</Text>
+        <Text style={[styles.title, { color: colors.text }]}>Mes Favoris</Text>
       </View>
 
       <FlatList
@@ -42,24 +44,19 @@ export default function Favorites() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
   header: {
     padding: 16,
     paddingTop: 50,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
   },
   backLink: {
-    color: '#007AFF',
     marginBottom: 8,
     fontSize: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0b1f2a',
   },
   listContent: {
     padding: 16,

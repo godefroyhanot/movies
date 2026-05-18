@@ -5,11 +5,14 @@ import { movies } from './src/data/movies';
 import { MovieCard, EmptyState, FilterButton } from '../components/movies';
 import { MovieType } from './src/types/movies';
 import { useFavorites } from './src/context/FavoritesContext';
+import { useTheme } from './src/context/ThemeContext';
 
 type SortType = 'none' | 'rating' | 'year';
 
 export default function Catalog() {
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { colors } = useTheme();
+
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | MovieType>('all');
   const [genreFilter, setGenreFilter] = useState<string>('All');
@@ -44,15 +47,16 @@ export default function Catalog() {
   }, [search, typeFilter, genreFilter, sortBy]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: colors.backgroundSecondary }]}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <Pressable onPress={() => router.back()}>
-           <Text style={styles.backLink}>← Retour</Text>
+           <Text style={[styles.backLink, { color: colors.tint }]}>← Retour</Text>
         </Pressable>
-        <Text style={styles.title}>Catalogue</Text>
+        <Text style={[styles.title, { color: colors.text }]}>Catalogue</Text>
         <TextInput
-          style={styles.searchInput}
+          style={[styles.searchInput, { backgroundColor: colors.backgroundSecondary, color: colors.text }]}
           placeholder="Rechercher par titre, genre, créateur..."
+          placeholderTextColor={colors.textSecondary}
           value={search}
           onChangeText={setSearch}
         />
@@ -80,14 +84,14 @@ export default function Catalog() {
 
         <View style={styles.filters}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterScroll}>
-            <Text style={styles.sortLabel}>Trier par :</Text>
+            <Text style={[styles.sortLabel, { color: colors.textSecondary }]}>Trier par :</Text>
             <FilterButton label="Défaut" active={sortBy === 'none'} onPress={() => setSortBy('none')} />
             <FilterButton label="Note" active={sortBy === 'rating'} onPress={() => setSortBy('rating')} />
             <FilterButton label="Année" active={sortBy === 'year'} onPress={() => setSortBy('year')} />
           </ScrollView>
         </View>
 
-        <Text style={styles.resultsCount}>
+        <Text style={[styles.resultsCount, { color: colors.textSecondary }]}>
           {filteredMovies.length} résultat{filteredMovies.length > 1 ? 's' : ''}
         </Text>
       </View>
@@ -113,17 +117,13 @@ export default function Catalog() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
   header: {
     padding: 16,
     paddingTop: 50,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
   },
   backLink: {
-    color: '#007AFF',
     marginBottom: 8,
     fontSize: 16,
   },
@@ -131,10 +131,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: '#0b1f2a',
   },
   searchInput: {
-    backgroundColor: '#f1f3f5',
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
@@ -149,13 +147,11 @@ const styles = StyleSheet.create({
   },
   sortLabel: {
     fontSize: 12,
-    color: '#6c757d',
     marginRight: 4,
   },
   resultsCount: {
     marginTop: 8,
     fontSize: 14,
-    color: '#6c757d',
   },
   listContent: {
     padding: 16,

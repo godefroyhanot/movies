@@ -31,4 +31,5 @@ Movies est une application mobile développée avec React Native, Expo et TypeSc
 - Tri par note ou année dans le catalogue.
 - Compteur de favoris en temps réel sur l'accueil.
 - Design soigné avec ombres et badges.
+- **Thème Sombre / Clair** : Support complet du mode sombre avec bascule manuelle.
 
